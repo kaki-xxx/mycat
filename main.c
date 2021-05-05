@@ -16,7 +16,7 @@ void do_cat(const char *path[], size_t n) {
     for (int i = 0; i < n; i++) {
         FILE *fp = fopen(path[i], "r");
         if (fp == NULL) {
-            die("Can't open: %s\n", path[i]);
+            die("%s: No such file or directory\n", path[i]);
         }
         char buf[256];
         do {
