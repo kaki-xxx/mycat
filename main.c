@@ -6,7 +6,10 @@
 #include <string.h>
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
+const char* prog_name;
+
 void die(const char* fmt, ...) {
+    fprintf(stderr, "%s: ", prog_name);
     va_list ap;
     va_start(ap, fmt);
     vfprintf(stderr, fmt, ap);
@@ -88,6 +91,7 @@ int getopt(int argc, char* const argv[], const char* optstring) {
 }
 
 int main(int argc, char *argv[]) {
+    prog_name = argv[0];
     char c;
     while ((c = getopt(argc, argv, "abc:")) != -1) {
         if (c == 'c') {
