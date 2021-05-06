@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <string.h>
+#include <errno.h>
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 const char* prog_name;
@@ -19,16 +20,28 @@ void die(const char* fmt, ...) {
 
 void do_cat(const char *path[], size_t n) {
     for (int i = 0; i < n; i++) {
+        errno = 0;
         FILE *fp = fopen(path[i], "r");
         if (fp == NULL) {
-            die("%s: No such file or directory\n", path[i]);
+            die("%s: %s\n", path[i], strerror(errno));
         }
         char buf[256];
         do {
-            size_t ret = fread(buf, sizeof(*buf), ARRAY_SIZE(buf), fp);
-            fwrite(buf, sizeof(*buf), ret, stdout);
+            errno = 0;
+            size_t fwb = fread(buf, sizeof(*buf), ARRAY_SIZE(buf), fp);
+            if (fwb < ARRAY_SIZE(buf) && !feof(fp)) {
+                die("%s: %s\n", path[i], strerror(errno));
+            }
+            errno = 0;
+            size_t ret = fwrite(buf, sizeof(*buf), fwb, stdout);
+            if (fwb < ret) {
+                die("%s: %s\n", path[i], strerror(errno));
+            }
         } while (!feof(fp));
-        fclose(fp);
+        errno = 0;
+        if (fclose(fp) == EOF) {
+            die("%s: %s\n", path[i], strerror(errno));
+        }
     }
 }
 
