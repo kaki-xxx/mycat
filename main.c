@@ -98,8 +98,9 @@ int main(int argc, char *argv[]) {
     while ((c = getopt(argc, argv, "abc:")) != -1) {
         if (c == 'c') {
             printf("%c %s\n", c, optarg);
-        } else {
-            printf("%c\n", c);
+        } else if (c == '?') {
+            die("invalid option -- '%c'\n"
+                "Try '/usr/bin/cat --help' for more information.\n", optopt);
         }
     }
     while (optind < argc) {
