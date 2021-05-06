@@ -53,7 +53,7 @@ static inline void swap(char **a, char **b) {
 }
 
 char* optarg;
-int optind = 1;
+int optind = 1, optopt;
 static int strind = 1;
 
 int getopt(int argc, char* const argv[], const char* optstring) {
@@ -74,6 +74,7 @@ int getopt(int argc, char* const argv[], const char* optstring) {
         }
         optstring++;
     }
+    int prev_opt = argv[optind][strind];
     strind++;
     if (!argv[optind][strind]) {
         optind++;
@@ -85,6 +86,7 @@ int getopt(int argc, char* const argv[], const char* optstring) {
         strind = 1;
     }
     if (!*optstring) {
+        optopt = prev_opt;
         return '?';
     }
     return *optstring;
