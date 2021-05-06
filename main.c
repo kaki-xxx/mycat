@@ -18,6 +18,22 @@ void die(const char* fmt, ...) {
     exit(EXIT_FAILURE);
 }
 
+void do_cat_file(FILE* fp, const char* path) {
+    char buf[256];
+    do {
+        errno = 0;
+        size_t fwb = fread(buf, sizeof(*buf), ARRAY_SIZE(buf), fp);
+        if (fwb < ARRAY_SIZE(buf) && !feof(fp)) {
+            die("%s: %s\n", path, strerror(errno));
+        }
+        errno = 0;
+        size_t ret = fwrite(buf, sizeof(*buf), fwb, stdout);
+        if (fwb < ret) {
+            die("%s: %s\n", path, strerror(errno));
+        }
+    } while (!feof(fp));
+}
+
 void do_cat(const char *path[], size_t n) {
     for (int i = 0; i < n; i++) {
         errno = 0;
@@ -25,19 +41,7 @@ void do_cat(const char *path[], size_t n) {
         if (fp == NULL) {
             die("%s: %s\n", path[i], strerror(errno));
         }
-        char buf[256];
-        do {
-            errno = 0;
-            size_t fwb = fread(buf, sizeof(*buf), ARRAY_SIZE(buf), fp);
-            if (fwb < ARRAY_SIZE(buf) && !feof(fp)) {
-                die("%s: %s\n", path[i], strerror(errno));
-            }
-            errno = 0;
-            size_t ret = fwrite(buf, sizeof(*buf), fwb, stdout);
-            if (fwb < ret) {
-                die("%s: %s\n", path[i], strerror(errno));
-            }
-        } while (!feof(fp));
+        do_cat_file(fp, path[i]);
         errno = 0;
         if (fclose(fp) == EOF) {
             die("%s: %s\n", path[i], strerror(errno));
@@ -141,9 +145,10 @@ int main(int argc, char *argv[]) {
                 "Try '%s --help' for more information.\n", optopt, prog_name);
         }
     }
-    while (optind < argc) {
-        printf("%s\n", argv[optind]);
-        optind++;
+    if (argc - optind == 0) {
+        do_cat_file(stdin, "stdin");
+    } else {
+        do_cat((const char **)&argv[optind], argc - optind);
     }
     return 0;
 }
