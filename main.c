@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
             printf("%c %s\n", c, optarg);
         } else if (c == '?') {
             die("invalid option -- '%c'\n"
-                "Try '/usr/bin/cat --help' for more information.\n", optopt);
+                "Try '%s --help' for more information.\n", c, prog_name);
         }
     }
     while (optind < argc) {
