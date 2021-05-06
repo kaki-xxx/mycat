@@ -92,8 +92,33 @@ int getopt(int argc, char* const argv[], const char* optstring) {
     return *optstring;
 }
 
+void show_usage() {
+    printf("Usage: cat [OPTION]... [FILE]...\n"
+           "Concatenate FILE(s) to standard output.\n"
+           "\n"
+           "With no FILE, or when FILE is -, read standard input.\n");
+}
+
+void find_long_opt(int argc, char* const argv[]) {
+    int i = 1;
+    while (i < argc && !starts_with(argv[i], "--")) {
+        i++;
+    }
+    if (i >= argc) {
+        return;
+    }
+    if (!strcmp(&argv[i][2], "help")) {
+        show_usage();
+        exit(0);
+    } else {
+        die("invalid option -- '%s'\n"
+            "Try '%s --help' for more information.\n", argv[i], prog_name);
+    }
+}
+
 int main(int argc, char *argv[]) {
     prog_name = argv[0];
+    find_long_opt(argc, argv);
     char c;
     while ((c = getopt(argc, argv, "abc:")) != -1) {
         if (c == 'c') {
