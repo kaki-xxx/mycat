@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <string.h>
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 void die(const char* fmt, ...) {
@@ -27,8 +29,67 @@ void do_cat(const char *path[], size_t n) {
     }
 }
 
+static bool starts_with(const char *s, const char *t) {
+    if (strlen(s) < strlen(t)) {
+        return false;
+    }
+    while (*t) {
+        if (*s != *t) {
+            return false;
+        }
+        s++;
+        t++;
+    }
+    return true;
+}
+
+static inline void swap(char **a, char **b) {
+    char *tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+char* optarg;
+int optind = 1;
+static int strind = 1;
+
+int getopt(int argc, char* const argv[], const char* optstring) {
+    if (optind >= argc) {
+        return -1;
+    }
+    int i = optind;
+    while (i < argc && !starts_with(argv[i], "-")) {
+        i++;
+    }
+    if (i >= argc) {
+        return -1;
+    }
+    swap((char **)&argv[optind], (char **)&argv[i]);
+    while (*optstring) {
+        if (argv[optind][strind] == *optstring) {
+            break;
+        }
+        optstring++;
+    }
+    strind++;
+    if (!argv[optind][strind]) {
+        optind++;
+        strind = 1;
+    }
+    if (!*optstring) {
+        return '?';
+    }
+    return *optstring;
+}
+
 int main(int argc, char *argv[]) {
-    const char **files = (const char**)argv + 1;
-    do_cat(files, argc - 1);
+    char c;
+    while ((c = getopt(argc, argv, "ab")) != -1) {
+        printf("%c\n", c);
+    }
+    while (optind < argc) {
+        printf("%s\n", argv[optind]);
+        optind++;
+    }
     return 0;
 }
