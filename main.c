@@ -77,7 +77,7 @@ int getopt(int argc, char* const argv[], const char* optstring) {
         strind = 1;
     }
     if (*optstring && optstring[1] == ':') {
-        optarg = &argv[optind][strind - 1];
+        optarg = &argv[optind][strind == 1 ? 0 : strind];
         optind++;
         strind = 1;
     }
