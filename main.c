@@ -76,6 +76,11 @@ int getopt(int argc, char* const argv[], const char* optstring) {
         optind++;
         strind = 1;
     }
+    if (*optstring && optstring[1] == ':') {
+        optarg = &argv[optind][strind - 1];
+        optind++;
+        strind = 1;
+    }
     if (!*optstring) {
         return '?';
     }
@@ -84,8 +89,12 @@ int getopt(int argc, char* const argv[], const char* optstring) {
 
 int main(int argc, char *argv[]) {
     char c;
-    while ((c = getopt(argc, argv, "ab")) != -1) {
-        printf("%c\n", c);
+    while ((c = getopt(argc, argv, "abc:")) != -1) {
+        if (c == 'c') {
+            printf("%c %s\n", c, optarg);
+        } else {
+            printf("%c\n", c);
+        }
     }
     while (optind < argc) {
         printf("%s\n", argv[optind]);
