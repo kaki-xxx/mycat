@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
             printf("%c %s\n", c, optarg);
         } else if (c == '?') {
             die("invalid option -- '%c'\n"
-                "Try '%s --help' for more information.\n", c, prog_name);
+                "Try '%s --help' for more information.\n", optopt, prog_name);
         }
     }
     while (optind < argc) {
