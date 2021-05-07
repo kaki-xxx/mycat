@@ -28,7 +28,7 @@ void do_cat_file(FILE* fp, const char* path) {
         }
         errno = 0;
         size_t ret = fwrite(buf, sizeof(*buf), fwb, stdout);
-        if (fwb < ret) {
+        if (ret < fwb) {
             die("%s: %s\n", path, strerror(errno));
         }
     } while (!feof(fp));
