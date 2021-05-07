@@ -22,13 +22,13 @@ void do_cat_file(FILE* fp, const char* path) {
     char buf[256];
     do {
         errno = 0;
-        size_t fwb = fread(buf, sizeof(*buf), ARRAY_SIZE(buf), fp);
-        if (fwb < ARRAY_SIZE(buf) && !feof(fp)) {
+        size_t read = fread(buf, sizeof(*buf), ARRAY_SIZE(buf), fp);
+        if (read < ARRAY_SIZE(buf) && !feof(fp)) {
             die("%s: %s\n", path, strerror(errno));
         }
         errno = 0;
-        size_t ret = fwrite(buf, sizeof(*buf), fwb, stdout);
-        if (ret < fwb) {
+        size_t written = fwrite(buf, sizeof(*buf), read, stdout);
+        if (written < read) {
             die("%s: %s\n", path, strerror(errno));
         }
     } while (!feof(fp));
