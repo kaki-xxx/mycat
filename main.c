@@ -13,7 +13,6 @@
 #include "config.h"
 #include "die.h"
 #include "cat.h"
-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 /**
  * @brief 文字列sが文字列tで始まるかどうか.
