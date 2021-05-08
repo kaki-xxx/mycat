@@ -1,3 +1,9 @@
+/**
+ * @file main.c
+ * @brief プログラムのエントリポイント.
+ * @details コマンドライン引数のパース, 使い方の表示, バージョン情報の表示など.
+ */
+
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,6 +15,9 @@
 #include "cat.h"
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
+/**
+ * @brief 文字列sが文字列tで始まるかどうか.
+ */
 static bool starts_with(const char *s, const char *t) {
     if (strlen(s) < strlen(t)) {
         return false;
@@ -33,6 +42,10 @@ char* optarg;
 int optind = 1, optopt;
 static int strind = 1;
 
+/**
+ * @brief コマンドライン引数のパース.
+ * @brief POSIXのgetoptのエミュレーション. opterrは未実装.
+ */
 int getopt(int argc, char* const argv[], const char* optstring) {
     if (optind >= argc) {
         return -1;
@@ -69,6 +82,9 @@ int getopt(int argc, char* const argv[], const char* optstring) {
     return *optstring;
 }
 
+/**
+ * @brief コマンドの使い方を表示.
+ */
 void show_usage() {
     printf("Usage: cat [OPTION]... [FILE]...\n"
            "Concatenate FILE(s) to standard output.\n"
@@ -76,12 +92,21 @@ void show_usage() {
            "With no FILE, or when FILE is -, read standard input.\n");
 }
 
+/**
+ * @brief バージョン情報を表示.
+ */
 void show_version() {
     printf("cat %d.%d\n", CAT_VERSION_MAJOR, CAT_VERSION_MINOR);
 }
 
+//! プログラムの名前(エラー出力用)
 const char* prog_name;
 
+/**
+ * @brief ロングオプション(--で始まるオプション)の簡易的な実装.
+ * @details --helpか--versionが指定された場合は対応した関数を呼び出して終了.
+            それ以外のロングオプションはエラーメッセージを表示して終了.
+ */
 void find_long_opt(int argc, char* const argv[]) {
     int i = 1;
     while (i < argc && !starts_with(argv[i], "--")) {
