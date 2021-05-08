@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
+#include "config.h"
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 const char* prog_name;
@@ -116,6 +117,10 @@ void show_usage() {
            "With no FILE, or when FILE is -, read standard input.\n");
 }
 
+void show_version() {
+    printf("cat %d.%d\n", CAT_VERSION_MAJOR, CAT_VERSION_MINOR);
+}
+
 void find_long_opt(int argc, char* const argv[]) {
     int i = 1;
     while (i < argc && !starts_with(argv[i], "--")) {
@@ -126,6 +131,9 @@ void find_long_opt(int argc, char* const argv[]) {
     }
     if (!strcmp(&argv[i][2], "help")) {
         show_usage();
+        exit(0);
+    } else if (!strcmp(&argv[i][2], "version")) {
+        show_version();
         exit(0);
     } else {
         die("invalid option -- '%s'\n"
