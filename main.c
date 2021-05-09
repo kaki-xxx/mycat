@@ -104,7 +104,7 @@ const char* prog_name;
 /**
  * @brief ロングオプション(--で始まるオプション)の簡易的な実装.
  * @details --helpか--versionが指定された場合は対応した関数を呼び出して終了.
-            それ以外のロングオプションはエラーメッセージを表示して終了.
+ *          それ以外のロングオプションはエラーメッセージを表示して終了.
  */
 void find_long_opt(int argc, char* const argv[]) {
     int i = 1;
