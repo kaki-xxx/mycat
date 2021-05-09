@@ -55,9 +55,9 @@ void do_cat_file(FILE* fp, const char* path) {
     static size_t line = 1;
     bool reached_newline = false;
     bool begin_line = true;
-    int written;
-    while ((written = until_newline(fp, buf, BUF_SIZE, &reached_newline)) != EOF) {
-        if (line_num && begin_line && written > 0) {
+    int read;
+    while ((read = until_newline(fp, buf, BUF_SIZE, &reached_newline)) != EOF) {
+        if (line_num && begin_line && read > 0) {
             printf("%6zd  ", line);
             line++;
             begin_line = false;
