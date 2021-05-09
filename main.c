@@ -88,7 +88,11 @@ void show_usage() {
     printf("Usage: cat [OPTION]... [FILE]...\n"
            "Concatenate FILE(s) to standard output.\n"
            "\n"
-           "With no FILE, or when FILE is -, read standard input.\n");
+           "With no FILE, or when FILE is -, read standard input.\n"
+           "\n"
+           "  -n         number all output lines\n"
+           "  --help     display this help and exit\n"
+           "  --version  output version information and exit\n");
 }
 
 /**
