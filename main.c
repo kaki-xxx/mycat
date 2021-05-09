@@ -43,7 +43,7 @@ static int strind = 1;
 
 /**
  * @brief コマンドライン引数のパース.
- * @brief POSIXのgetoptのエミュレーション. opterrは未実装.
+ * @details POSIXのgetoptのエミュレーション. opterrは未実装.
  */
 int getopt(int argc, char* const argv[], const char* optstring) {
     if (optind >= argc) {
