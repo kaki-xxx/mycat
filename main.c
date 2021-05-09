@@ -126,13 +126,16 @@ void find_long_opt(int argc, char* const argv[]) {
     }
 }
 
+//! 行番号を表示するかどうかのオプション.
+bool line_num = false;
+
 int main(int argc, char *argv[]) {
     prog_name = argv[0];
     find_long_opt(argc, argv);
     char c;
-    while ((c = getopt(argc, argv, "abc:")) != -1) {
-        if (c == 'c') {
-            printf("%c %s\n", c, optarg);
+    while ((c = getopt(argc, argv, "n")) != -1) {
+        if (c == 'n') {
+            line_num = true;
         } else if (c == '?') {
             die("invalid option -- '%c'\n"
                 "Try '%s --help' for more information.\n", optopt, prog_name);
