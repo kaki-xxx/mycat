@@ -31,9 +31,9 @@ void do_cat_file(FILE* fp, const char* path) {
 }
 
 /**
- * @brief 指定されたパス文字列の配列を順に開いて標準出力へ出力.
+ * @brief 指定されたパス文字列の配列が表すファイルを順に開いて標準出力へ出力.
  * @param path パス文字列の配列.
- * @param n パス文字列の個数
+ * @param n パス文字列の個数.
  */
 void do_cat(const char *path[], size_t n) {
     for (int i = 0; i < n; i++) {
