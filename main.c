@@ -50,7 +50,7 @@ int getopt(int argc, char* const argv[], const char* optstring) {
         return -1;
     }
     int i = optind;
-    while (i < argc && !starts_with(argv[i], "-")) {
+    while (i < argc && (!starts_with(argv[i], "-") || strlen(argv[i]) <= 1)) {
         i++;
     }
     if (i >= argc) {
@@ -138,7 +138,8 @@ int main(int argc, char *argv[]) {
                 "Try '%s --help' for more information.\n", optopt, prog_name);
         }
     }
-    if (argc - optind == 0) {
+    int n = argc - optind;
+    if (n == 0 || n == 1 && !strcmp(argv[optind], "-")) {
         do_cat_file(stdin, "stdin");
     } else {
         do_cat((const char **)&argv[optind], argc - optind);
