@@ -8,7 +8,6 @@
 #include <stdbool.h>
 #include <errno.h>
 #include "die.h"
-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 /**
  * @brief ファイルから一行読み込む.
