@@ -46,8 +46,8 @@ extern bool line_num;
 
 /**
  * @brief ファイルを標準出力に出力する.
- * @param fp 出力するファイルを表す構造体のポインタ.
- * @param path 出力するファイルのパス(エラー出力用)
+ * @param[in] fp 出力するファイルを表す構造体のポインタ.
+ * @param[in] path 出力するファイルのパス(エラー出力用)
  */
 #define BUF_SIZE 256
 void do_cat_file(FILE* fp, const char* path) {
@@ -71,8 +71,8 @@ void do_cat_file(FILE* fp, const char* path) {
 
 /**
  * @brief 指定されたパス文字列の配列が表すファイルを順に開いて標準出力へ出力.
- * @param path パス文字列の配列.
- * @param n パス文字列の個数.
+ * @param[in] path パス文字列の配列.
+ * @param[in] n パス文字列の個数.
  */
 void do_cat(const char *path[], size_t n) {
     for (int i = 0; i < n; i++) {

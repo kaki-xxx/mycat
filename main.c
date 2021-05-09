@@ -16,6 +16,8 @@
 
 /**
  * @brief 文字列sが文字列tで始まるかどうか.
+ * @param[in] s
+ * @param[in] t
  */
 static bool starts_with(const char *s, const char *t) {
     if (strlen(s) < strlen(t)) {
