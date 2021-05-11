@@ -35,7 +35,7 @@ int until_newline(FILE *fp, char *buf, size_t n, bool *reached_newline) {
             break;
         }
     }
-    if (c == EOF && ferror(stdin)) {
+    if (c == EOF && ferror(fp)) {
         die("%s\n", strerror(errno));
     }
     buf[i] = '\0';
