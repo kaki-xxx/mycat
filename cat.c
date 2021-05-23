@@ -76,13 +76,11 @@ void do_cat_file(FILE* fp, const char* path) {
  */
 void do_cat(const char *path[], size_t n) {
     for (int i = 0; i < n; i++) {
-        errno = 0;
         FILE *fp = fopen(path[i], "r");
         if (fp == NULL) {
             die("%s: %s\n", path[i], strerror(errno));
         }
         do_cat_file(fp, path[i]);
-        errno = 0;
         if (fclose(fp) == EOF) {
             die("%s: %s\n", path[i], strerror(errno));
         }
