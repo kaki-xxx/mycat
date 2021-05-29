@@ -20,7 +20,7 @@
  *          改行文字が見つかるとそこで読むのをやめる.
  *          bufに書き込まれる文字列は改行文字を含み, null文字で終端される.
  */
-int until_newline(FILE *fp, char *buf, size_t n, bool *reached_newline) {
+int until_newline(FILE *fp, char *buf, size_t n, bool *reached_newline, const char* path) {
     if (feof(fp)) {
         return EOF;
     }
@@ -35,8 +35,8 @@ int until_newline(FILE *fp, char *buf, size_t n, bool *reached_newline) {
             break;
         }
     }
-    if (c == EOF && ferror(fp)) {
-        die("%s\n", strerror(errno));
+    if (ferror(fp)) {
+        die("%s: %s\n", path, strerror(errno));
     }
     buf[i] = '\0';
     return i;
@@ -56,7 +56,7 @@ void do_cat_file(FILE* fp, const char* path) {
     bool reached_newline = false;
     bool begin_line = true;
     int read;
-    while ((read = until_newline(fp, buf, BUF_SIZE, &reached_newline)) != EOF) {
+    while ((read = until_newline(fp, buf, BUF_SIZE, &reached_newline, path)) != EOF) {
         if (line_num && begin_line && read > 0) {
             printf("%6zd  ", line);
             line++;
