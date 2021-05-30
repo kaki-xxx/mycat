@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <errno.h>
 #include "die.h"
+#include "cat.h"
 
 /**
  * @brief ファイルから一行読み込む.
@@ -50,7 +51,7 @@ extern bool line_num;
  * @param[in] path 出力するファイルのパス(エラー出力用)
  */
 #define BUF_SIZE 256
-void do_cat_file(FILE* fp, const char* path) {
+static void do_cat_file(FILE* fp, const char* path) {
     char buf[BUF_SIZE];
     static size_t line = 1;
     bool reached_newline = false;
@@ -69,20 +70,22 @@ void do_cat_file(FILE* fp, const char* path) {
     }
 }
 
+void do_cat_stdin() {
+    do_cat_file(stdin, "stdin");
+}
+
 /**
  * @brief 指定されたパス文字列の配列が表すファイルを順に開いて標準出力へ出力.
  * @param[in] path パス文字列の配列.
  * @param[in] n パス文字列の個数.
  */
-void do_cat(const char *path[], size_t n) {
-    for (int i = 0; i < n; i++) {
-        FILE *fp = fopen(path[i], "r");
-        if (fp == NULL) {
-            die("%s: %s\n", path[i], strerror(errno));
-        }
-        do_cat_file(fp, path[i]);
-        if (fclose(fp) == EOF) {
-            die("%s: %s\n", path[i], strerror(errno));
-        }
+void do_cat(const char *path) {
+    FILE *fp = fopen(path, "r");
+    if (fp == NULL) {
+        die("%s: %s\n", path, strerror(errno));
+    }
+    do_cat_file(fp, path);
+    if (fclose(fp) == EOF) {
+        die("%s: %s\n", path, strerror(errno));
     }
 }

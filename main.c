@@ -148,10 +148,18 @@ int main(int argc, char *argv[]) {
         }
     }
     int n = argc - optind;
-    if (n == 0 || n == 1 && !strcmp(argv[optind], "-")) {
-        do_cat_file(stdin, "stdin");
-    } else {
-        do_cat((const char **)&argv[optind], argc - optind);
+    if (n == 0) {
+        do_cat_stdin();
+        exit(1);
     }
+
+    for (int i = optind; i < argc; i++) {
+        if (!strcmp(argv[1], "-")) {
+            do_cat_stdin();
+        } else {
+            do_cat(argv[i]);
+        }
+    }
+
     return 0;
 }
