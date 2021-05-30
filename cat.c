@@ -72,6 +72,7 @@ static void do_cat_file(FILE* fp, const char* path) {
 
 void do_cat_stdin() {
     do_cat_file(stdin, "stdin");
+    clearerr(stdin);
 }
 
 /**
